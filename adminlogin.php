@@ -1,0 +1,638 @@
+<?php
+if(isset($_POST['b1'])){
+	
+	$un=$_POST['username'];
+	$pass=$_POST['password'];
+	
+	if(!(empty($un)) && !(empty($pass))){
+		$passmd5=md5($pass);
+		$q="select `id` from `admin` where `username`='$un' and `password`='$passmd5'";
+		$qr=@mysqli_query($mysqlc,$q);
+		//echo @mysqli_num_rows($qr);
+		if($qr){
+			if(@mysqli_num_rows($qr)==1){
+				$_row=mysqli_fetch_row($qr);
+				$id=$_row[0];
+				$_SESSION['aid']=$id;
+				$_SESSION['un']=$un;
+				header("Location: adminsignin&up.php");
+				
+				
+			}
+			else{
+				echo "<script>alert('invalid credentials ')</script>";
+			}
+		}
+		else{
+			echo "q failed";
+		}
+		
+		
+	}
+	else{
+		echo "<script>alert('enter user name and password')</script>";
+	}
+	
+}
+
+if(isset($_POST['b2'])){
+		$un=$_POST['un'];
+		$pass=$_POST['pass'];
+		$cpass=$_POST['cpass'];
+		$fn=$_POST['fn'];
+		$ln=$_POST['ln'];
+		
+		if(!(empty($un)) && !(empty($pass)) && !(empty($cpass)) && !(empty($fn)) && !(empty($ln))){
+			$passmd5=md5($pass);
+			//unique usernames
+			if($pass!=$cpass){
+				echo "<script>alert('pass not match')</script>";
+			}
+			else{
+			$q="select `username` from `admin` where `username`='$un'";
+			$qr=mysqli_query($mysqlc,$q);
+			if($qr){
+			$nr=mysqli_num_rows($qr);
+			if($nr==1){
+				echo "<script>alert('username already exists')</script>";
+			}
+			else if($nr==0){
+				$qi="insert into `admin`(`id`,`username`,`password`,`firstname`,`lastname`) values (NULL,'$un','$passmd5','$fn','$ln')";
+				$qrr=mysqli_query($mysqlc,$qi);
+				
+				
+				if($qrr){
+					ob_start();
+					echo "registered";
+                    header("Location:adminsignin&up.php?registered=true");
+					
+				}
+				
+				else{
+					echo "insert q failed";
+				}
+				
+				
+			}
+			
+			}
+			else{
+				echo "q failed";
+			}
+			}
+		
+		}
+		else{
+			echo "<script>alert('enter all fields')</script>";
+		}
+	}
+	
+	
+	
+?>
+
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+*{
+margin:0;
+padding:0;
+}
+==============
+.banner{
+width:100%;
+height:100vh;
+position:relative:
+overflow:hidden:
+}
+.slider{
+width:100%;
+height:100%:
+position:absolute:
+top:0;
+}
+#slideimg{
+width:100%;
+height:100%;
+
+}
+.overlay{
+width:100%;
+height:100%;
+
+position:absolute;
+top:0;
+}
+.overlayy{
+  width:100%;
+height:100%;
+
+position:absolute;
+top:0;
+
+}
+.content{
+width:60%;
+margin:160px auto 0;
+color:#fff;
+}
+.jk{
+padding-top:38%;
+padding-left:2%;
+}
+
+button{
+width:20px
+padding-right:50px;
+padding-top:10px;
+text-align:center;
+margin:0 10px;
+border-radius:25px;
+font-weight:bold;
+border:10px solid #fe7250;
+background:#fe7250;
+color:#fff;
+cursor:pointer;
+}
+===================
+
+.nm{
+padding-top:40px;
+width:100%;
+float:left;
+}
+
+.kl{
+	margin:0;
+	color:#6a6f8c;
+	font:600 16px/18px 'Open Sans',sans-serif;
+	padding-top:100px;
+}
+
+*,:after,:before{box-sizing:border-box}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+a{color:inherit;text-decoration:none}
+
+.login-wrap{
+	width:100%;
+	margin:auto;
+	max-width:400px;
+	min-height:525px;
+	position:relative;
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+}
+
+#po{
+font-family: futura;
+      font-style: italic;
+      
+      width:100%;
+      
+      margin: 0 auto;
+     
+      
+      color:#313131;
+      font-size:45px;
+      font-weight: bold;
+      
+      -webkit-animation:colorchange 20s infinite alternate;
+      
+}
+ @-webkit-keyframes colorchange {
+      0% {
+        
+        color: #F46B0C;
+      }
+      
+      10% {
+        
+        color: #B9F40C;
+      }
+      
+      20% {
+        
+        color: #0DEA98;
+      }
+      
+      30% {
+        
+        color: #d35400;
+      }
+      
+      40% {
+        
+        color: #0DBAEA;
+      }
+      
+      50% {
+        
+        color: #34495e;
+      }
+      
+      60% {
+        
+        color: D11145;
+      }
+      
+      70% {
+        
+        color: #2980b9;
+      }
+      80% {
+     
+        color: #f1c40f;
+      }
+      
+      90% {
+     
+        color: #2980b9;
+      }
+      
+      100% {
+        
+        color: pink;
+      }
+    }
+
+
+
+bv{
+  
+  background-size:cover;
+  font-family: 'Cabin Condensed', sans-serif;
+  display:flex;
+  flex-direction:column;
+  justify-content:left-side;
+  align-items:center;
+}
+
+center{
+padding-top:400px;
+}
+
+
+svg{font-weight:bold;max-width:600px;height:auto;}
+
+===================================
+
+nm{
+padding-top:40px;
+width:100%;
+float:left;
+}
+
+.kl{
+	margin:0;
+	color:#6a6f8c;
+	font:600 16px/18px 'Open Sans',sans-serif;
+	padding-top:100px;
+}
+
+*,:after,:before{box-sizing:border-box}
+.clearfix:after,.clearfix:before{content:'';display:table}
+.clearfix:after{clear:both;display:block}
+a{color:inherit;text-decoration:none}
+
+.login-wrap{
+	width:100%;
+	margin:auto;
+	max-width:400px;
+	min-height:525px;
+	position:relative;
+	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
+	
+}
+.login-html{
+	width:100%;
+	height:100%;
+	position:absolute;
+	padding:90px 70px 50px 70px;
+	
+	
+	
+	background: rgba( 192, 148, 148, 0);
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 13px );
+-webkit-backdrop-filter: blur( 13px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+.login-html .sign-in-htm,
+.login-html .sign-up-htm{
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	position:absolute;
+	transform:rotateY(180deg);
+	backface-visibility:hidden;
+	transition:all .4s linear;
+}
+.login-html .sign-in,
+.login-html .sign-up,
+.login-form .group .check{
+	display:none;
+}
+.login-html .tab,
+.login-form .group .label,
+.login-form .group .button{
+	text-transform:uppercase;
+}
+.login-html .tab{
+	font-size:22px;
+	margin-right:15px;
+	padding-bottom:5px;
+	margin:0 15px 10px 0;
+	display:inline-block;
+	border-bottom:2px solid transparent;
+}
+.login-html .sign-in:checked + .tab,
+.login-html .sign-up:checked + .tab{
+	
+	border-color:#1161ee;
+}
+.login-form{
+	min-height:345px;
+	position:relative;
+	perspective:1000px;
+	transform-style:preserve-3d;
+}
+.login-form .group{
+	margin-bottom:15px;
+}
+.login-form .group .label,
+.login-form .group .input,
+.login-form .group .button{
+	width:100%;
+	color:#fff;
+	display:block;
+}
+.login-form .group .input,
+.login-form .group .button{
+	border:none;
+	padding:15px 20px;
+	border-radius:25px;
+	background:rgba(255,255,255,.1);
+}
+.login-form .group input[data-type="password"]{
+	text-security:circle;
+	-webkit-text-security:circle;
+}
+.login-form .group .label{
+	color:#aaa;
+	font-size:12px;
+}
+.login-form .group .button{
+	background:#1161ee;
+}
+.login-form .group label .icon{
+	width:15px;
+	height:15px;
+	border-radius:2px;
+	position:relative;
+	display:inline-block;
+	background:rgba(255,255,255,.1);
+}
+.login-form .group label .icon:before,
+.login-form .group label .icon:after{
+	content:'';
+	width:10px;
+	height:2px;
+	background:#fff;
+	position:absolute;
+	transition:all .2s ease-in-out 0s;
+}
+.login-form .group label .icon:before{
+	left:3px;
+	width:5px;
+	bottom:6px;
+	transform:scale(0) rotate(0);
+}
+.login-form .group label .icon:after{
+	top:6px;
+	right:0;
+	transform:scale(0) rotate(0);
+}
+.login-form .group .check:checked + label{
+	color:#fff;
+}
+.login-form .group .check:checked + label .icon{
+	background:#1161ee;
+}
+.login-form .group .check:checked + label .icon:before{
+	transform:scale(1) rotate(45deg);
+}
+.login-form .group .check:checked + label .icon:after{
+	transform:scale(1) rotate(-45deg);
+}
+.login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm{
+	transform:rotate(0);
+}
+.login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
+	transform:rotate(0);
+}
+
+.hr{
+	height:2px;
+	margin:60px 0 50px 0;
+	background:rgba(255,255,255,.2);
+}
+.foot-lnk{
+	text-align:center;
+}
+
+table{
+align:center;
+}
+
+
+.fa {
+ 
+  font-size: 50px;
+  width: 50px;
+  
+  text-decoration: none;
+  margin: 5px 2px;
+}
+.fa:hover {
+    opacity: 0.7;
+}
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+.fa-linkedin {
+  background: #007bb5;
+  color: white;
+}
+.fa-instagram {
+  background: #125688;
+  color: pink
+  }
+
+
+</style>
+</head>
+
+
+
+<body onload="slider()">
+
+  <div class="banner">
+    <div class="slider">
+	    <img src="" id="slideimg">
+	</div>
+	
+<div class="overlay">
+
+<h1 id="po"><i>SREE VIDHYANIKETHAN ENGINEERING COLLEGE</h1>
+
+<div class="bv">
+<svg viewbox="0 0 100 20">
+  <defs>
+    <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="5%" stop-color="#0A16E0"/>
+      <stop offset="95%" stop-color="#09EDF9"/>
+    </linearGradient>
+    <pattern id="wave" x="0" y="0" width="120" height="20" patternUnits="userSpaceOnUse">
+      <path id="wavePath" d="M-40 9 Q-30 7 -20 9 T0 9 T20 9 T40 9 T60 9 T80 9 T100 9 T120 9 V20 H-40z" mask="url(#mask)" fill="url(#gradient)"> 
+        <animateTransform
+            attributeName="transform"
+            begin="0s"
+            dur="1.5s"
+            type="translate"
+            from="0,0"
+            to="40,0"
+            repeatCount="indefinite" />
+      </path>
+    </pattern>
+  </defs>
+  <text text-anchor="middle" x="50" y="15" font-size="17" fill="url(#wave)"  fill-opacity="0.6">C E T A</text>
+  <text text-anchor="middle" x="50" y="15" font-size="17" fill="url(#gradient)" fill-opacity="0.6">C E T A</text>
+</svg>
+</div>
+
+
+<!-- Add font awesome icons -->
+
+
+<div class="overlayy">
+
+
+<div class="nm" style="margin-left: % ;float:;">
+<div class="kl">
+ <div class="login-wrap">
+	<div class="login-html">
+		<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+		<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+		<div class="login-form">
+			<div class="sign-in-htm">
+		<form action="<?php echo $cf?>" method="POST">
+				<div class="group">
+					<label for="user" class="label">Username</label>
+					<input id="user" type="text" class="input" name="username">
+				</div>
+				<div class="group">
+					<label for="pass" class="label">Password</label>
+					<input id="pass" type="password" class="input" data-type="password" name="password">
+				</div>
+				<div class="group">
+					<input id="check" type="checkbox" class="check" checked>
+					<label for="check"><span class="icon"></span> Keep me Signed in</label>
+				</div>
+				<div class="group">
+			<button type="submit" class="button" name="b1" >Sign-in</button>
+				</div>
+				<div class="hr"></div>
+				<div class="foot-lnk">
+					<a href="#forgot">Forgot Password?</a>
+				</div>
+			</div>
+		</form>
+			<div class="sign-up-htm">
+		<form action="<?php echo $cf?>" method="POST">
+				<div class="group">
+					<label for="user" class="label">Username</label>
+					<input id="user" type="text" class="input" name="un" required>
+				</div>
+				<div class="group">
+					<label for="pass" class="label">Password</label>
+					<input id="pass" type="password" class="input" data-type="password" name="pass" required>
+				</div>
+				<div class="group">
+					<label for="pass" class="label">Confirm Password</label>
+					<input id="pass" type="password" class="input" data-type="password" name="cpass" required>
+				</div>
+				<div class="group">
+					<label for="user" class="label">firstname</label>
+					<input id="user" type="text" class="input" name="fn" required>
+				</div>
+				<div class="group">
+					<label for="user" class="label">lastname</label>
+					<input id="user" type="text" class="input" name="ln" required>
+				</div>
+				<div class="group">
+					<button type="submit" class="button" name="b2">sign up</button>
+				</div>
+				
+				<div class="foot-lnk">
+					<label for="tab-1">Already Member?</a>
+				</div>
+		</form>
+			</div>
+		</div>
+	  </div>
+   </div>
+ </div>
+</div>
+	  
+	  
+	  <table align="right">
+<tr>
+<td>
+<a href="#"><i class="fab fa-instagram"></i></a></td>
+
+
+<td>
+<a href="#" class="fa fa-twitter"></a></td>
+
+
+<td>
+<a href="#" class="fa fa-linkedin"></a></td>
+
+
+<td>
+<a href="#" class="fa fa-instagram"></a></td></tr></table>
+</div>
+   
+</div>
+</div>
+  <script>
+  var slideimg = document.getElementById("slideimg");
+   var images = new Array("https://www.vidyanikethan.edu/wp-content/uploads/2018/07/slider_1.jpg","https://www.vidyanikethan.edu/wp-content/uploads/2017/11/slider_4.png",
+   "https://www.vidyanikethan.edu/wp-content/uploads/2018/07/slider_5.jpg",
+   "https://www.vidyanikethan.edu/wp-content/uploads/2018/07/slider_6.jpg",
+   "https://www.vidyanikethan.edu/wp-content/uploads/2018/07/slider_3.jpg",
+   "https://www.vidyanikethan.edu/wp-content/uploads/2017/12/campus.jpg");
+   var len = images.length;
+   var i=0;
+   function slider(){
+        if(i > len-1){
+	          i=0;	
+		}
+		slideimg.src=images[i];
+		i++;
+		setTimeout('slider()',3000);
+	}
+   
+  </script>
+</body>
+</html>
